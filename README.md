@@ -93,3 +93,14 @@ Tendrá un método run() que realice lo siguiente:
 - Muestra las cuentas del cliente con NIF 000X
 - Mete 300 en la cuenta ES004
 - Muestra los datos del titular de la cuenta ES0001
+
+### BankApp4
+
+Tendrá un método run() que realice lo siguiente:
+- Pide un banco usando BankReader
+- Busca la cuenta con IBAN ES0001
+  - Si no existe la cuenta muestra un mensaje de error
+  - Si existe:
+    - Muestra los datos de la cuenta
+    - Haz una transferencia de todo el dinero de la cuenta ES0001 a la cuenta ES0002
+    - Muestra la información del banco
