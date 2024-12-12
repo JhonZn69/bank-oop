@@ -14,21 +14,18 @@ public class BankReader {
         this.accountReader = accountReader;
     }
 
-    public Bank read() {
-        System.out.println("Introduce los datos del banco:");
-        System.out.println("Nombre:");
+    public Bank read(){
+        System.out.println("Introduce los datos del banco");
+        System.out.println("Nombre del banco");
         String name = scanner.nextLine();
 
-        System.out.println("¿Cuantas cuentas hay?");
-        int numAccounts = scanner.nextInt();
+        System.out.println("Cuantas cuentas vas a introducir?");
+        int cantAccounts = scanner.nextInt();
         scanner.nextLine();
-
-        Account[] accounts = new Account[numAccounts];
-
+        Account[] accounts = new Account[cantAccounts];
         for (int i = 0; i < accounts.length; i++) {
             accounts[i] = accountReader.read();
         }
-
         return new Bank(
                 name,
                 accounts

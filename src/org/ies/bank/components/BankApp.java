@@ -1,88 +1,108 @@
 package org.ies.bank.components;
 
+import org.ies.bank.model.Account;
 import org.ies.bank.model.Bank;
+
 
 import java.util.Scanner;
 
 public class BankApp {
-    // Se necesita el Scanner para hacer el menu
     private final Scanner scanner;
-    // Se necesita el BankReader para pedir un banco al usuario
     private final BankReader bankReader;
 
     public BankApp(Scanner scanner, BankReader bankReader) {
         this.scanner = scanner;
         this.bankReader = bankReader;
     }
+    private int chooseOption(){
+        System.out.println("Elige una opcion");
+        System.out.println("1. Mostrar las cuentas del banco");
+        System.out.println("2. Mostrar los datos de una cuenta");
+        System.out.println("3. Mostrar los datos de las cuentas de un cliente");
+        System.out.println("4. Ingresar dinero en cuenta");
+        System.out.println("5. Sacar dinero de una cuenta");
+        System.out.println("6. Contar cuentas de cliente");
+        System.out.println("7. Mostrar el cliente de una cuenta");
+        System.out.println("8. Realizar una transferencia");
+        System.out.println("9. Salir");
+        int option = scanner.nextInt();
+        scanner.nextLine();
+        return option;
+    }
 
     public void run() {
-        // Siempre empezamos pidiendo los datos con el reader
-        Bank bank = bankReader.read();
-
         int option;
+        var bank = bankReader.read();
         do {
             option = chooseOption();
             if (option == 1) {
-                // Mostrar cuentas
-                bank.showAccounts();
+                bank.printAccount();
             } else if (option == 2) {
-                // Mostrar datos cuenta
-                System.out.println("Introduce el IBAN:");
+                System.out.println("Introduce el IBAN de la cuenta");
                 String iban = scanner.nextLine();
-                bank.showAccount(iban);
+                var findAccount = bank.findAccount(iban);
+                if (findAccount != null) {
+                    bank.showAccountIban(iban);
+                } else {
+                    System.out.println("No existe la cuenta");
+                }
             } else if (option == 3) {
-                System.out.println("Introduce el NIF del cliente:");
+                System.out.println("Introduce el NIF del cliente asociado a la cuenta");
                 String nif = scanner.nextLine();
-
-                bank.showCustomerAccounts(nif);
+                bank.showAccountNif(nif);
             } else if (option == 4) {
-                System.out.println("Introduce el IBAN:");
+                System.out.println("Introduce el IBAN de la cuenta a la que desea ingresar el dinero");
                 String iban = scanner.nextLine();
-
-                System.out.println("Cantidad vas a ingresar:");
-                double amount = scanner.nextDouble();
+                System.out.println("Ingrese la cantidad de dinero que desea ingresar");
+                double money = scanner.nextDouble();
                 scanner.nextLine();
-
-                bank.deposit(iban, amount);
+                var findAccount = bank.findAccount(iban);
+                if (findAccount != null) {
+                    bank.addMoney(iban, money);
+                    bank.showAccountIban(iban);
+                } else {
+                    System.out.println("No existe la cuenta");
+                }
             } else if (option == 5) {
-                System.out.println("Introduce el IBAN:");
+                System.out.println("Introduce el IBAN de la cuenta a la que desea retirar el dinero");
                 String iban = scanner.nextLine();
-
-                System.out.println("Cantidad vas a sacar:");
+                System.out.println("Ingrese la cantidad de dinero que desea retirar");
+                double money = scanner.nextDouble();
+                scanner.nextLine();
+                var findAccount = bank.findAccount(iban);
+                if (findAccount != null) {
+                    if (findAccount.getBalance() < money) {
+                        System.out.println("Saldo insuficiente");
+                    } else {
+                        bank.takeOutMoney(iban, money);
+                        bank.showAccountIban(iban);
+                    }
+                } else {
+                    System.out.println("No existe la cuenta");
+                }
+            } else if (option == 6) {
+                System.out.println("Introduce el NIF del cliente");
+                String nif = scanner.nextLine();
+                bank.showCantAccounts(nif);
+            } else if (option == 7) {
+                System.out.println("Introduce el IBAN de la cuenta");
+                String iban = scanner.nextLine();
+                bank.showCustomerIban(iban);
+            } else if (option == 8) {
+                System.out.println("Ingrese el IBAN de la cuenta de origen");
+                String iban1 = scanner.nextLine();
+                System.out.println("Ingrese la cantidad de dinero que desea transferir");
                 double amount = scanner.nextDouble();
                 scanner.nextLine();
-
-                bank.withdraw(iban, amount);
-            } else if (option == 6) {
-                System.out.println("Introduce el NIF del cliente:");
-                String nif = scanner.nextLine();
-
-                int customerAccountsNumber = bank.countCustomerAccounts(nif);
-                System.out.println("El cliente tiene " + customerAccountsNumber + " cuentas.");
-            } else if (option == 7) {
-                System.out.println("Introduce el IBAN:");
-                String iban = scanner.nextLine();
-
-                bank.showAccountCustomer(iban);
+                System.out.println("Ingrese el IBAN de la cuenta de destino");
+                String iban2 = scanner.nextLine();
+                bank.transferMoney(iban1, iban2, amount);
+            } else if (option == 9) {
+                System.out.println("Saliendo...");
+            } else {
+                System.out.println("Opcion invalida");
             }
-        } while (option != 8);
-    }
-
-    private int chooseOption() {
-        int option;
-        do {
-            System.out.println("Elige una opcion:");
-            System.out.println("1. Mostrar cuentas");
-            System.out.println("2. Mostrar datos cuenta");
-            System.out.println("3. Mostrar cuentas de cliente");
-            System.out.println("4. Ingresar");
-            System.out.println("5. Sacar");
-            System.out.println("6. Contar cuentas de cliente");
-            System.out.println("7. Mostrar titular de cuenta");
-            System.out.println("8. Salir");
-            option = scanner.nextInt();
-            scanner.nextLine();
-        } while (option < 1 || option > 8);
-        return option;
+        }while (option != 9) ;
     }
 }
+

@@ -15,20 +15,24 @@ public class AccountReader {
     }
 
     public Account read() {
-        System.out.println("Introduce los datos de la cuenta:");
-        System.out.println("IBAN:");
+        System.out.println("Introduce los datos de la cuenta bancaria");
+        System.out.println("Codigo  IBAN: ");
         String iban = scanner.nextLine();
 
-        System.out.println("Saldo:");
-        double balance = scanner.nextDouble();
+        System.out.println("Saldo de la cuenta");
+        Double balance = scanner.nextDouble();
         scanner.nextLine();
 
-        Customer customer = customerReader.read();
+        System.out.println("Nombre del cliente: ");
+        scanner.nextLine();
+        Customer cliente = customerReader.read();
+
 
         return new Account(
                 iban,
                 balance,
-                customer
+                cliente
         );
     }
 }
+

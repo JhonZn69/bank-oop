@@ -4,24 +4,24 @@ import java.util.Objects;
 
 public class Account {
     private String iban;
-    private double balance;
-    private Customer customer;
+    private Double balance;
+    private Customer cliente;
 
-    public Account(String iban, double balance, Customer customer) {
+    public Account(String iban, Double saldo, Customer cliente) {
         this.iban = iban;
-        this.balance = balance;
-        this.customer = customer;
+        this.balance = saldo;
+        this.cliente = cliente;
     }
-
-    public void showInfo() {
-        System.out.println("IBAN: " + iban +
-                ". Saldo: " + balance +
-                ". NIF cliente: " + customer.getNif()
-        );
+    public void showInfo(){
+        System.out.println("IBAN: " + getIban());
+        System.out.println("Saldo: " + getBalance());
+        System.out.println("NIF del cliente: " + cliente.getNif());
     }
-
     public void deposit(double amount) {
         balance += amount;
+    }
+    public void takeOut(double amount) {
+        balance -= amount;
     }
 
     public String getIban() {
@@ -32,40 +32,41 @@ public class Account {
         this.iban = iban;
     }
 
-    public double getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public Customer getCliente() {
+        return cliente;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCliente(Customer cliente) {
+        this.cliente = cliente;
     }
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return Double.compare(balance, account.balance) == 0 && Objects.equals(iban, account.iban) && Objects.equals(customer, account.customer);
+        return Objects.equals(iban, account.iban) && Objects.equals(balance, account.balance) && Objects.equals(cliente, account.cliente);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(iban, balance, customer);
+        return Objects.hash(iban, balance, cliente);
     }
 
     @Override
     public String toString() {
         return "Account{" +
                 "iban='" + iban + '\'' +
-                ", balance=" + balance +
-                ", customer=" + customer +
+                ", saldo=" + balance +
+                ", cliente=" + cliente +
                 '}';
     }
 }
